@@ -1,0 +1,32 @@
+var IncomingForm = require('formidable').IncomingForm;
+
+template (this.url.pathname === '/') {
+    this.response.write('Hello');
+    this.response.end('\n');
+}
+
+template (this.url.pathname === '/hello') {
+    this.response.write('Hello ' + this.url.query.name);
+    this.response.end('\n');
+}
+
+template (this.url.pathname === '/methods' && this.request.method == 'GET') {
+    this.response.write(this.request.method + '\n');
+    for (var key in this.url.query) {
+        this.response.write(key + ': ' + this.url.query[key] + '\n')
+    }
+    this.response.end('\n');
+}
+
+template (this.url.pathname === '/methods' && this.request.method === 'POST') {
+    var form = new IncomingForm();
+    var that = this;
+    form.parse(that.request, function(err, fields, files) {
+        that.response.write(that.request.method + '\n');
+        for (var key in fields) {
+            that.response.write(key + ': ' + fields[key] + '\n')
+        }
+        that.response.end('\n');
+    });
+}
+
