@@ -20,13 +20,12 @@ template (this.url.pathname === '/methods' && this.request.method == 'GET') {
 
 template (this.url.pathname === '/methods' && this.request.method === 'POST') {
     var form = new IncomingForm();
-    var that = this;
-    form.parse(that.request, function(err, fields, files) {
-        that.response.write(that.request.method + '\n');
+    form.parse(this.request, function(err, fields, files) {
+        this.response.write(this.request.method + '\n');
         for (var key in fields) {
-            that.response.write(key + ': ' + fields[key] + '\n')
+            this.response.write(key + ': ' + fields[key] + '\n')
         }
-        that.response.end('\n');
-    });
+        this.response.end('\n');
+    }.bind(this));
 }
 
